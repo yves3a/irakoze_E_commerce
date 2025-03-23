@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Card container for the login form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Login to Your Account</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Username Field -->
+                        <div class="form-group mb-3">
+                            {{ form.username.label_tag }}  <!-- Username label -->
+                            {{ form.username }}  <!-- Username field -->
+                            {% if form.username.errors %}  <!-- Display errors if any -->
+                                <div class="invalid-feedback d-block">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="form-group mb-3">
+                            {{ form.password.label_tag }}  <!-- Password label -->
+                            {{ form.password }}  <!-- Password field -->
+                            {% if form.password.errors %}  <!-- Display errors if any -->
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Submit button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer for additional links -->
+                <div class="card-footer text-center">
+                    <a href="{% url 'password_reset' %}" class="text-muted">Forgot your password?</a>
+                    <br>
+                    <a href="{% url 'signup' %}" class="text-muted">Don't have an account? Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

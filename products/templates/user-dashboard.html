@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Welcome Section with a more personalized message and design -->
+    <div class="jumbotron text-center bg-primary text-white rounded py-4">
+        <h1 class="display-4">Welcome, {{ request.user.username }}!</h1>
+        <p class="lead">We’re glad to have you back. Take a look at your recent orders or browse our products!</p>
+    </div>
+
+    <!-- Display User Orders -->
+    <div class="my-5">
+        <h3>Your Recent Orders</h3>
+        <ul class="list-group">
+            {% if orders %}
+                {% for order in orders %}
+                    {% if order.product %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <!-- Product Image -->
+                                    <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" class="img-thumbnail" style="width:100px;height:auto;">
+                                </div>
+                                <div class="col-md-8">
+                                    <strong>{{ order.product.name }}</strong> - Quantity: {{ order.quantity }}
+                                    <!-- Product Description -->
+                                    <p>{{ order.product.description }}</p>
+
+                                    <!-- Update and Delete Forms -->
+                                    <div class="order-actions mt-3">
+                                        <form method="POST" action="{% url 'update-order' order.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <label for="quantity-{{ order.id }}">Update Quantity:</label>
+                                            <input type="number" name="quantity" id="quantity-{{ order.id }}" value="{{ order.quantity }}" min="1" max="{{ order.product.stock_quantity }}" class="form-control mb-2" required>
+                                            <button type="submit" class="btn btn-warning">Update Order</button>
+                                        </form>
+
+                                        <form method="POST" action="{% url 'delete-order' order.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete Order</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item">Unknown product - Quantity: {{ order.quantity }}</li>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">You have no orders.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Display Products Available for Ordering -->
+    <div class="my-5">
+        <h3>Available Products</h3>
+        <div class="row">
+            {% if products %}
+                {% for product in products %}
+                <!-- Bootstrap Grid to create a card layout -->
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top" style="height:200px;object-fit:cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                            <p class="card-text"><strong>{{ product.price }} USD</strong></p>
+                            <form method="POST" action="{% url 'make-order' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <input type="number" name="quantity" min="1" max="{{ product.stock_quantity }}" value="1" class="form-control mb-2" required>
+                                <button type="submit" class="btn btn-primary btn-block">Order Now</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p>No products available for ordering.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="text-center mt-5">
+        <a href="{% url 'product-list' %}" class="btn btn-outline-info">View All Products for More Information</a>
+    </div>
+</div>
+{% endblock %}

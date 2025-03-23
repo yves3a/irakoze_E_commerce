@@ -1,0 +1,41 @@
+/* General body styling */
+body {
+    background-color: #f8f9fa; /* Default background color for all other pages */
+}
+
+/* Apply background image only on the products page */
+.products-page {
+    background-image: url("/static/product_images/e_commerce.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh; /* Ensure background covers full page height */
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: black !important; /* Added !important to enforce it */
+    height: 100vh;
+    color: white;
+    padding: 25px;
+}
+
+
+.nav-link {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.main-content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+}

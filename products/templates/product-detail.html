@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card" style="width: 18rem;">
+        <!-- Display the product image -->
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top img-fluid rounded shadow" alt="{{ product.name }}">
+        {% else %}
+            <img src="{% static 'images/default-product.jpg' %}" class="card-img-top img-fluid rounded shadow" alt="No Image Available">
+        {% endif %}
+
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">Category: {{ product.category.name }}</p>
+            <p class="card-text">Description: {{ product.description }}</p>
+            <p class="card-text">Price: ${{ product.price }}</p>
+            <p class="card-text">Stock Quantity: {{ product.stock_quantity }}</p>
+
+            <form method="POST" action="{% url 'make_order' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control" min="1" value="1">
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Order Now</button>
+            </form>
+        </div>
+    </div>
+
+    {% if messages %}
+        <div class="alert alert-info mt-3">
+            <ul class="list-unstyled">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
