@@ -28,7 +28,7 @@ urlpatterns = [
     path('api/v1/orders/delete/<int:pk>/', views.OrderDetail.as_view(), name='delete-order'),  
 
     # ================== Frontend - Authentication and Views ==================
-    path('', views.home, name='home'),
+    path('', views.dashboard_view, name='dashboard'),
     path('products/', views.product_list, name='product-list'),  
     path('product/<int:id>/', views.product_details, name='product-details'),
     path('signup/', views.signup_view, name='signup'), 

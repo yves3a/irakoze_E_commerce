@@ -127,8 +127,8 @@ def product_detail(request, pk):
     return render(request, 'product-detail.html', {'product': product})
 
 # Make Order View
-@require_POST
 @login_required
+@require_POST
 def make_order(request):
     product_id = request.POST.get('product_id')
     quantity = int(request.POST.get('quantity'))
@@ -196,6 +196,12 @@ def product_details(request, id):
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'product-list.html', {'products': products})
+
+def dashboard_view(request):
+    products = Product.objects.all()
+    if request.user.is_authenticated:
+        return redirect('user-dashboard' if request.user.role == 'customer' else 'admin-dashboard')
+    return render(request, 'dashboard.html', {'products': products})
 
 
 
