@@ -198,9 +198,12 @@ def product_list(request):
     return render(request, 'product-list.html', {'products': products})
 
 def dashboard_view(request):
+    query = request.GET.get('q')
     products = Product.objects.all()
-    if request.user.is_authenticated:
-        return redirect('user-dashboard' if request.user.role == 'customer' else 'admin-dashboard')
+
+    if query:
+        products = products.filter(name__icontains=query)
+
     return render(request, 'dashboard.html', {'products': products})
 
 
